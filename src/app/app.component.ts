@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CmsService } from './cms.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+  users: Array<any>;
+
+  constructor(private _cmsService: CmsService){
+    this._cmsService.getUsers()
+      .subscribe(res => this.users = res);
+  }
 }
