@@ -1,7 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { HttpModule } from '@angular/http/src/http_module';
+
+// HTTP modules resolved based on these release logs
+// https://github.com/angular/angular/issues/20096
+// https://github.com/angular/angular-cli/issues/8858
+import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 import { CmsService } from './cms.service';
 
 @NgModule({
@@ -10,7 +15,8 @@ import { CmsService } from './cms.service';
   ],
   imports: [
     BrowserModule,
-    HttpModule
+    HttpModule,
+    HttpClientModule
   ],
   providers: [CmsService],
   bootstrap: [AppComponent]
