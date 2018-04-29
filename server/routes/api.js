@@ -1,22 +1,18 @@
 const express = require('express'),
       router = express.Router(),
       MongoClient = require('mongodb').MongoClient,
-			ObjectID = require('mongodb').ObjectID;
-			mongoose = require('mongoose');
+	  ObjectID = require('mongodb').ObjectID,
+	  mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/mean-to-the-bone-db');
+let mongodbUrl = 'mongodb://localhost:27017/mean-to-the-bone-db';
+
+mongoose.connect(mongodbUrl, {useMongoClient: true})
+	.then( () => {console.log('Successfully connected to the MongoDB database at URL: ' + mongodbUrl)})
+	.catch( () => {console.log('Failed to connect ot the MongoDB database at URL' + mongodbUrl)});
 
 // TODOS - import Mongo schemas
 const User  = require('./../models/user');
 const Page  = require('./../models/page');
-
-// Connect
-const connection = (callback) => {
-    return MongoClient.connect('mongodb://localhost:27017/mean-to-the-bone-db', (err, db) => {
-        if (err) return console.log(err);
-        callback(db);
-    });
-};
 
 // Error handling
 const sendError = (err, res) => {
