@@ -10,4 +10,6 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 * MongoDB
 
 ##TODOS
-....
+1. Add User Authentication
+2. Replace Callbacks/Promises with Async/Await functions
+3. APIs/Models to revisit
