@@ -2,7 +2,7 @@ const express = require("express"),
   router = express.Router();
 
 //Setting up API routes
-const users = require("./api/page.users");
+const users = require("./api/user.routes");
 const pages = require("./api/page.routes");
 const headers = require("./api/footer.routes");
 const footers = require("./api/footer.routes");
