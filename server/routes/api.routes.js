@@ -18,12 +18,4 @@ router.get("/", (req, res) => {
     .json({ message: "Welcome to CMS-to-the-bone MEAN stack API service" });
 });
 
-// 	  mongoose = require('mongoose');
-
-// let mongodbUrl = 'mongodb://localhost:27017/mean-to-the-bone-cms-db';
-
-// mongoose.connect(mongodbUrl, {useMongoClient: true})
-// 	.then( () => {console.log('Successfully connected to the MongoDB database at URL: ' + mongodbUrl)})
-// 	.catch( () => {console.log('Failed to connect ot the MongoDB database at URL' + mongodbUrl)});
-
 module.exports = router;

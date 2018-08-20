@@ -7,6 +7,8 @@ const express = require("express"),
 // API routes
 const api = require("./server/routes/api.routes");
 
+const mongo_server = require("./server/models/index");
+
 // Parsers
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -39,4 +41,8 @@ app.set("port", port);
 
 const server = http.createServer(app);
 
-server.listen(port, () => console.log(`Running on localhost:${port}`));
+server.listen(port, async () => {
+  const isConnected = await mongo_server.openDB();
+  const message = isConnected ? "connected" : "not connected";
+  console.log(`Running on localhost:${port} and with DB is ${message}`);
+});
