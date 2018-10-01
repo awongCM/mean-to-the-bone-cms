@@ -20,5 +20,13 @@ export class CmsService {
     return this._http.get("/api/pages")
       .map(result => this.result = result.json().data);
   }
+  getHeaders() {
+    return this._http.get("/api/headers")
+      .map(result => this.result = result.json().data);
+  }
+  getFooters() {
+    return this._http.get("/api/footers")
+      .map(result => this.result = result.json().data);
+  }
 
 }

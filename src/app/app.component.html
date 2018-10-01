@@ -2,7 +2,10 @@
 
 <div class="cms-container">
     <div class="header">
-      <h2>Header</h2>
+      <h2>Headers</h2>
+      <ul>
+        <li *ngFor="let header of headers">{{ header.title }}</li>
+      </ul>
     </div>
     <div class="page">
       <h2>Pages</h2>
@@ -11,7 +14,10 @@
       </ul>
     </div>
     <div class="footer">
-      <h2>Footer</h2>
+      <h2>Footers</h2>
+      <ul>
+        <li *ngFor="let footer of footers">{{ footer.title }}</li>
+      </ul>
     </div>
 </div>
 
