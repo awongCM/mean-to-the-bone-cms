@@ -4,7 +4,7 @@ const express = require("express"),
 //Setting up API routes
 const users = require("./api/user.routes");
 const pages = require("./api/page.routes");
-const headers = require("./api/footer.routes");
+const headers = require("./api/header.routes");
 const footers = require("./api/footer.routes");
 
 router.use("/users", users);

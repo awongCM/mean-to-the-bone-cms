@@ -1,19 +1,26 @@
-const Header = require('../models/header');
+const Header = require("../models/header");
 
 const _this = this;
 
+exports.getHeaders = async function() {
+  try {
+    const header = await Header.find();
+    return header;
+  } catch (error) {
+    throw Error("Error when fetcing Headers ");
+  }
+};
+
 exports.getHeader = async function(id) {
-  
   try {
     const header = await Header.findById(id);
     return header;
   } catch (error) {
-    throw Error('Error when fetcing Header by id: ');
+    throw Error("Error when fetcing Header by id: ");
   }
-}
+};
 
 exports.createHeader = async function(header) {
-
   const newHeader = new Header({
     title: header.title,
     content: header.content
@@ -23,23 +30,21 @@ exports.createHeader = async function(header) {
     const savedHeader = await newHeader.save();
     return savedHeader;
   } catch (error) {
-    throw Error('Error when saving Header');
+    throw Error("Error when saving Header");
   }
-}
+};
 
 exports.deleteHeader = async function(id) {
-
   try {
-    const deletedHeader = await Header.remove({_id: id});
+    const deletedHeader = await Header.remove({ _id: id });
     if (deletedHeader.result.n === 0) {
       throw Error("Header could not be deleted");
     }
     return deletedHeader;
-
   } catch (error) {
-    throw Error('Error when deleting Header');
+    throw Error("Error when deleting Header");
   }
-}
+};
 
 exports.updateHeader = async function(header) {
   const current_id = header.id;
@@ -47,7 +52,7 @@ exports.updateHeader = async function(header) {
   try {
     const currentHeader = await newHeader.findById(current_id);
   } catch (error) {
-    throw Error('Error when finding Header');
+    throw Error("Error when finding Header");
   }
 
   if (!currentHeader) {
@@ -65,7 +70,6 @@ exports.updateHeader = async function(header) {
     const savedHeader = await currentHeader.save();
     return savedHeader;
   } catch (error) {
-    throw Error('Error when updating Header');
+    throw Error("Error when updating Header");
   }
-
-}
+};
