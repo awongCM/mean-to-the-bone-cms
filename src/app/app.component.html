@@ -22,8 +22,59 @@
 </div>
 
 <div class="users">
+  <h2>Users</h2>
   <ul>
     <li *ngFor="let user of users">{{ user.name }}</li>
-  </ul>  
+  </ul>
 </div>
 
+<section class="pepper-panel" *ngIf="pepperStatus">
+  <h2>Pepper SMS Alerts</h2>
+  <p class="pepper-tagline">The notification layer for this bare-bones CMS.</p>
+  <p>
+    Mode:
+    <strong>{{ pepperStatus.mode }}</strong>
+    <span *ngIf="pepperStatus.mode === 'mock'"> (messages log to the server console)</span>
+  </p>
+
+  <div class="pepper-form">
+    <h3>Subscribe</h3>
+    <input type="text" placeholder="Name (optional)" [(ngModel)]="subscriberName">
+    <input type="tel" placeholder="+15551234567" [(ngModel)]="subscriberPhone">
+    <button type="button" (click)="subscribeToPepper()">Subscribe</button>
+  </div>
+
+  <div class="pepper-form">
+    <h3>Send test SMS</h3>
+    <input type="tel" placeholder="+15551234567" [(ngModel)]="testPhone">
+    <button type="button" (click)="sendPepperTest()">Send test</button>
+  </div>
+
+  <div class="pepper-form">
+    <h3>Publish page (triggers SMS)</h3>
+    <input type="text" placeholder="Page title" [(ngModel)]="newPageTitle">
+    <textarea placeholder="Page content" [(ngModel)]="newPageContent"></textarea>
+    <button type="button" (click)="publishPage()">Publish page</button>
+  </div>
+
+  <p class="pepper-message" *ngIf="pepperMessage">{{ pepperMessage }}</p>
+
+  <div class="pepper-lists">
+    <div>
+      <h3>Subscribers</h3>
+      <ul>
+        <li *ngFor="let subscriber of pepperSubscribers">
+          {{ subscriber.name || 'Subscriber' }} — {{ subscriber.phone }}
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h3>Recent notifications</h3>
+      <ul>
+        <li *ngFor="let item of pepperHistory">
+          {{ item.status }} to {{ item.phone }}: {{ item.message }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

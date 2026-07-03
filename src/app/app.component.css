@@ -10,3 +10,62 @@ ul li {
   list-style: none;
   text-transform: capitalize;
 }
+
+.cms-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.pepper-panel {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.pepper-tagline {
+  color: #666;
+  margin-top: 0;
+}
+
+.pepper-form {
+  margin-bottom: 1.5rem;
+}
+
+.pepper-form input,
+.pepper-form textarea {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.pepper-form textarea {
+  min-height: 80px;
+}
+
+.pepper-form button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.pepper-message {
+  color: #2c6e2f;
+  font-weight: bold;
+}
+
+.pepper-lists {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.pepper-lists > div {
+  flex: 1;
+  min-width: 240px;
+}

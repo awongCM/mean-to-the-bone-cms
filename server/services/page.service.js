@@ -50,7 +50,7 @@ exports.updatePage = async function(page) {
   const current_id = page.id;
 
   try {
-    const currentPage = await newPage.findById(current_id);
+    const currentPage = await Page.findById(current_id);
   } catch (error) {
     throw Error("Error when finding Page");
   }
