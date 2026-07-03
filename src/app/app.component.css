@@ -1,71 +1,118 @@
 h1 {
   text-align: center;
+  margin-bottom: 0.25rem;
 }
 
-ul {
-  padding: 0;
-}
-
-ul li {
-  list-style: none;
-  text-transform: capitalize;
-}
-
-.cms-container {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.sms-panel {
-  max-width: 720px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #fafafa;
-}
-
-.sms-tagline {
+.subtitle {
+  text-align: center;
   color: #666;
   margin-top: 0;
 }
 
-.sms-form {
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.tabs button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  background: #2f5bea;
+  color: #fff;
+  border-color: #2f5bea;
+}
+
+.admin-panel {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+}
+
+.editor,
+.content-list {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.25rem;
   margin-bottom: 1.5rem;
 }
 
-.sms-form input,
-.sms-form textarea {
+.editor input,
+.editor textarea {
   display: block;
   width: 100%;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   padding: 0.5rem;
   box-sizing: border-box;
 }
 
-.sms-form textarea {
-  min-height: 80px;
+.editor textarea {
+  min-height: 120px;
 }
 
-.sms-form button {
+.checkbox {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+button {
   padding: 0.5rem 1rem;
   cursor: pointer;
 }
 
-.sms-message {
+button.secondary {
+  background: #eee;
+}
+
+button.danger {
+  background: #d9534f;
+  color: #fff;
+  border-color: #d9534f;
+}
+
+.status-message {
   color: #2c6e2f;
   font-weight: bold;
 }
 
-.sms-lists {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
+ul {
+  padding: 0;
+  margin: 0;
 }
 
-.sms-lists > div {
+ul li {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.item-body {
   flex: 1;
-  min-width: 240px;
+}
+
+.item-body p {
+  margin: 0.25rem 0 0;
+  color: #555;
+}
+
+.item-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
 }

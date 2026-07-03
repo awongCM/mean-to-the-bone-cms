@@ -1,80 +1,66 @@
-<h1>Welcome to our Mean-to-the-bone CMS Page</h1>
+<h1>Mean-To-The-Bone CMS</h1>
+<p class="subtitle">Manage pages, headers, footers, and users.</p>
 
-<div class="cms-container">
-    <div class="header">
-      <h2>Headers</h2>
-      <ul>
-        <li *ngFor="let header of headers">{{ header.title }}</li>
-      </ul>
+<nav class="tabs">
+  <button type="button" [class.active]="activeTab === 'pages'" (click)="setTab('pages')">Pages</button>
+  <button type="button" [class.active]="activeTab === 'headers'" (click)="setTab('headers')">Headers</button>
+  <button type="button" [class.active]="activeTab === 'footers'" (click)="setTab('footers')">Footers</button>
+  <button type="button" [class.active]="activeTab === 'users'" (click)="setTab('users')">Users</button>
+</nav>
+
+<section class="admin-panel">
+  <div class="editor" *ngIf="activeTab !== 'users'">
+    <h2>{{ editingId ? 'Edit' : 'Create' }} {{ activeTab | titlecase }}</h2>
+    <input type="text" placeholder="Title" [(ngModel)]="draft.title">
+    <textarea placeholder="Content" [(ngModel)]="draft.content"></textarea>
+    <div class="actions">
+      <button type="button" (click)="saveContent()">{{ editingId ? 'Update' : 'Create' }}</button>
+      <button type="button" class="secondary" *ngIf="editingId" (click)="cancelEdit()">Cancel</button>
     </div>
-    <div class="page">
-      <h2>Pages</h2>
-      <ul>
-        <li *ngFor="let page of pages">{{ page.title }}</li>
-      </ul>
-    </div>
-    <div class="footer">
-      <h2>Footers</h2>
-      <ul>
-        <li *ngFor="let footer of footers">{{ footer.title }}</li>
-      </ul>
-    </div>
-</div>
-
-<div class="users">
-  <h2>Users</h2>
-  <ul>
-    <li *ngFor="let user of users">{{ user.name }}</li>
-  </ul>
-</div>
-
-<section class="sms-panel" *ngIf="smsStatus">
-  <h2>CMS SMS Notifications</h2>
-  <p class="sms-tagline">Notify subscribers when CMS content is published or updated.</p>
-  <p>
-    Mode:
-    <strong>{{ smsStatus.mode }}</strong>
-    <span *ngIf="smsStatus.mode === 'mock'"> (messages log to the server console)</span>
-  </p>
-
-  <div class="sms-form">
-    <h3>Subscribe</h3>
-    <input type="text" placeholder="Name (optional)" [(ngModel)]="subscriberName">
-    <input type="tel" placeholder="+15551234567" [(ngModel)]="subscriberPhone">
-    <button type="button" (click)="subscribeToSms()">Subscribe</button>
   </div>
 
-  <div class="sms-form">
-    <h3>Send test SMS</h3>
-    <input type="tel" placeholder="+15551234567" [(ngModel)]="testPhone">
-    <button type="button" (click)="sendSmsTest()">Send test</button>
+  <div class="editor" *ngIf="activeTab === 'users'">
+    <h2>{{ editingId ? 'Edit' : 'Create' }} User</h2>
+    <input type="text" placeholder="Name" [(ngModel)]="userDraft.name">
+    <input type="text" placeholder="Username" [(ngModel)]="userDraft.username">
+    <input type="password" placeholder="{{ editingId ? 'New password (optional)' : 'Password' }}" [(ngModel)]="userDraft.password">
+    <label class="checkbox">
+      <input type="checkbox" [(ngModel)]="userDraft.admin"> Admin user
+    </label>
+    <div class="actions">
+      <button type="button" (click)="saveUser()">{{ editingId ? 'Update' : 'Create' }}</button>
+      <button type="button" class="secondary" *ngIf="editingId" (click)="cancelEdit()">Cancel</button>
+    </div>
   </div>
 
-  <div class="sms-form">
-    <h3>Publish page (triggers SMS)</h3>
-    <input type="text" placeholder="Page title" [(ngModel)]="newPageTitle">
-    <textarea placeholder="Page content" [(ngModel)]="newPageContent"></textarea>
-    <button type="button" (click)="publishPage()">Publish page</button>
-  </div>
+  <p class="status-message" *ngIf="statusMessage">{{ statusMessage }}</p>
 
-  <p class="sms-message" *ngIf="smsMessage">{{ smsMessage }}</p>
+  <div class="content-list">
+    <h2>Existing {{ activeTab | titlecase }}</h2>
+    <ul *ngIf="activeTab !== 'users'">
+      <li *ngFor="let item of currentItems()">
+        <div class="item-body">
+          <strong>{{ item.title }}</strong>
+          <p>{{ item.content }}</p>
+        </div>
+        <div class="item-actions">
+          <button type="button" (click)="startEdit(item)">Edit</button>
+          <button type="button" class="danger" (click)="deleteItem(item)">Delete</button>
+        </div>
+      </li>
+    </ul>
 
-  <div class="sms-lists">
-    <div>
-      <h3>Subscribers</h3>
-      <ul>
-        <li *ngFor="let subscriber of smsSubscribers">
-          {{ subscriber.name || 'Subscriber' }} — {{ subscriber.phone }}
-        </li>
-      </ul>
-    </div>
-    <div>
-      <h3>Recent notifications</h3>
-      <ul>
-        <li *ngFor="let item of smsHistory">
-          {{ item.status }} to {{ item.phone }}: {{ item.message }}
-        </li>
-      </ul>
-    </div>
+    <ul *ngIf="activeTab === 'users'">
+      <li *ngFor="let user of users">
+        <div class="item-body">
+          <strong>{{ user.name || user.username }}</strong>
+          <p>@{{ user.username }} <span *ngIf="user.admin">(admin)</span></p>
+        </div>
+        <div class="item-actions">
+          <button type="button" (click)="startEdit(user)">Edit</button>
+          <button type="button" class="danger" (click)="deleteItem(user)">Delete</button>
+        </div>
+      </li>
+    </ul>
   </div>
 </section>

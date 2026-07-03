@@ -12,19 +12,15 @@ const headerSchema = new Schema({
   updated_at: Date
 });
 
-const Header = mongoose.model('header', headerSchema);  
-
-//Mongodb hooks
-headerSchema.pre('save', (next) => {
-  
+headerSchema.pre("save", function(next) {
   const currentDate = new Date();
-
   this.updated_at = currentDate;
-
   if (!this.created_at) {
     this.created_at = currentDate;
   }
   next();
 });
+
+const Header = mongoose.model("header", headerSchema);
 
 module.exports = Header;

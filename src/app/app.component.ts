@@ -7,102 +7,170 @@ import { CmsService } from './cms.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  users: Array<any>;
-  pages: Array<any>;
-  headers: Array<any>;
-  footers: Array<any>;
-  smsStatus: any;
-  smsSubscribers: Array<any>;
-  smsHistory: Array<any>;
+  activeTab = 'pages';
+  statusMessage = '';
 
-  subscriberName = '';
-  subscriberPhone = '';
-  testPhone = '';
-  newPageTitle = '';
-  newPageContent = '';
-  smsMessage = '';
+  users: Array<any> = [];
+  pages: Array<any> = [];
+  headers: Array<any> = [];
+  footers: Array<any> = [];
 
-  constructor(private _cmsService: CmsService) {
-    this.loadCmsData();
-    this.loadSmsData();
+  draft = this.emptyContentDraft();
+  userDraft = this.emptyUserDraft();
+  editingId: string = null;
+
+  constructor(private cmsService: CmsService) {
+    this.loadAll();
   }
 
-  loadCmsData() {
-    this._cmsService.getUsers()
-      .subscribe(res => this.users = res);
-
-    this._cmsService.getPages()
-      .subscribe(res => this.pages = res);
-
-    this._cmsService.getHeaders()
-      .subscribe(res => this.headers = res);
-
-    this._cmsService.getFooters()
-      .subscribe(res => this.footers = res);
+  emptyContentDraft() {
+    return { title: '', content: '' };
   }
 
-  loadSmsData() {
-    this._cmsService.getSmsStatus()
-      .subscribe(res => this.smsStatus = res);
-
-    this._cmsService.getSmsSubscribers()
-      .subscribe(res => this.smsSubscribers = res);
-
-    this._cmsService.getSmsHistory()
-      .subscribe(res => this.smsHistory = res);
+  emptyUserDraft() {
+    return { name: '', username: '', password: '', admin: false };
   }
 
-  subscribeToSms() {
-    if (!this.subscriberPhone) {
-      this.smsMessage = 'Enter a phone number to subscribe.';
+  setTab(tab: string) {
+    this.activeTab = tab;
+    this.cancelEdit();
+  }
+
+  loadAll() {
+    this.cmsService.getUsers().subscribe(res => this.users = res || []);
+    this.cmsService.getPages().subscribe(res => this.pages = res || []);
+    this.cmsService.getHeaders().subscribe(res => this.headers = res || []);
+    this.cmsService.getFooters().subscribe(res => this.footers = res || []);
+  }
+
+  currentItems() {
+    if (this.activeTab === 'users') {
+      return this.users;
+    }
+    if (this.activeTab === 'headers') {
+      return this.headers;
+    }
+    if (this.activeTab === 'footers') {
+      return this.footers;
+    }
+    return this.pages;
+  }
+
+  startEdit(item: any) {
+    this.editingId = item._id;
+    if (this.activeTab === 'users') {
+      this.userDraft = {
+        name: item.name || '',
+        username: item.username || '',
+        password: '',
+        admin: !!item.admin
+      };
       return;
     }
 
-    this._cmsService.subscribeToSms(this.subscriberName, this.subscriberPhone)
-      .subscribe(
-        () => {
-          this.smsMessage = 'Subscribed to CMS SMS alerts.';
-          this.subscriberName = '';
-          this.subscriberPhone = '';
-          this.loadSmsData();
-        },
-        () => this.smsMessage = 'Subscription failed.'
-      );
+    this.draft = {
+      title: item.title || '',
+      content: item.content || ''
+    };
   }
 
-  sendSmsTest() {
-    if (!this.testPhone) {
-      this.smsMessage = 'Enter a phone number for the test SMS.';
+  cancelEdit() {
+    this.editingId = null;
+    this.draft = this.emptyContentDraft();
+    this.userDraft = this.emptyUserDraft();
+    this.statusMessage = '';
+  }
+
+  saveContent() {
+    if (!this.draft.title) {
+      this.statusMessage = 'Title is required.';
       return;
     }
 
-    this._cmsService.sendSmsTest(this.testPhone)
-      .subscribe(
-        () => {
-          this.smsMessage = 'Test SMS queued.';
-          this.testPhone = '';
-          this.loadSmsData();
-        },
-        () => this.smsMessage = 'Test SMS failed.'
-      );
+    const payload = {
+      title: this.draft.title,
+      content: this.draft.content
+    };
+
+    let request;
+    if (this.editingId) {
+      const updatePayload = Object.assign({ _id: this.editingId }, payload);
+      if (this.activeTab === 'pages') {
+        request = this.cmsService.updatePage(updatePayload);
+      } else if (this.activeTab === 'headers') {
+        request = this.cmsService.updateHeader(updatePayload);
+      } else {
+        request = this.cmsService.updateFooter(updatePayload);
+      }
+    } else if (this.activeTab === 'pages') {
+      request = this.cmsService.createPage(payload);
+    } else if (this.activeTab === 'headers') {
+      request = this.cmsService.createHeader(payload);
+    } else {
+      request = this.cmsService.createFooter(payload);
+    }
+
+    request.subscribe(
+      () => {
+        this.statusMessage = this.editingId ? 'Content updated.' : 'Content created.';
+        this.cancelEdit();
+        this.loadAll();
+      },
+      () => this.statusMessage = 'Save failed.'
+    );
   }
 
-  publishPage() {
-    if (!this.newPageTitle) {
-      this.smsMessage = 'Enter a page title to publish.';
+  saveUser() {
+    if (!this.userDraft.username || (!this.editingId && !this.userDraft.password)) {
+      this.statusMessage = 'Username and password are required for new users.';
       return;
     }
 
-    this._cmsService.createPage(this.newPageTitle, this.newPageContent)
-      .subscribe(
-        () => {
-          this.smsMessage = 'Page published. Subscribers will be notified by SMS.';
-          this.newPageTitle = '';
-          this.newPageContent = '';
-          this.loadCmsData();
-          this.loadSmsData();
-        },
-        () => this.smsMessage = 'Page publish failed.'
-      );
+    const payload: any = {
+      name: this.userDraft.name,
+      username: this.userDraft.username,
+      admin: this.userDraft.admin
+    };
+
+    if (this.userDraft.password) {
+      payload.password = this.userDraft.password;
+    }
+
+    const request = this.editingId
+      ? this.cmsService.updateUser(Object.assign({ _id: this.editingId }, payload))
+      : this.cmsService.createUser(payload);
+
+    request.subscribe(
+      () => {
+        this.statusMessage = this.editingId ? 'User updated.' : 'User created.';
+        this.cancelEdit();
+        this.loadAll();
+      },
+      () => this.statusMessage = 'User save failed.'
+    );
+  }
+
+  deleteItem(item: any) {
+    let request;
+    if (this.activeTab === 'users') {
+      request = this.cmsService.deleteUser(item._id);
+    } else if (this.activeTab === 'pages') {
+      request = this.cmsService.deletePage(item._id);
+    } else if (this.activeTab === 'headers') {
+      request = this.cmsService.deleteHeader(item._id);
+    } else {
+      request = this.cmsService.deleteFooter(item._id);
+    }
+
+    request.subscribe(
+      () => {
+        this.statusMessage = 'Item deleted.';
+        if (this.editingId === item._id) {
+          this.cancelEdit();
+        }
+        this.loadAll();
+      },
+      () => this.statusMessage = 'Delete failed.'
+    );
   }
 }

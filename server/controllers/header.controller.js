@@ -1,57 +1,47 @@
 const HeaderService = require("../services/header.service");
 
-const _this = this;
-
 exports.getHeaders = async function(req, res, next) {
   try {
-    const header = await HeaderService.getHeaders();
-
+    const headers = await HeaderService.getHeaders();
     return res
       .status(200)
-      .json({ data: header, message: "Successfully fetched header" });
+      .json({ data: headers, message: "Successfully fetched headers" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
 exports.getHeader = async function(req, res, next) {
   try {
-    const header_id = req.query.id;
-
-    const header = await HeaderService.getHeader(header_id);
-
+    const header = await HeaderService.getHeader(req.params.id);
     return res
       .status(200)
       .json({ data: header, message: "Successfully fetched header" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
 exports.createHeader = async function(req, res, next) {
-  const newHeader = {
-    title: req.body.title,
-    content: req.body.content
-  };
-
   try {
-    const createdHeader = await HeaderService.createHeader(newHeader);
+    const createdHeader = await HeaderService.createHeader({
+      title: req.body.title,
+      content: req.body.content
+    });
     return res
       .status(200)
-      .json({ data: createdHeader, message: "Successfully saved Header" });
+      .json({ data: createdHeader, message: "Successfully created header" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
 exports.removeHeader = async function(req, res, next) {
-  const id = req.params.id;
-
   try {
-    const deletedHeader = await HeaderService.deleteHeader(id);
-    return res.status(200).json({ message: "Successfully deleted Header" });
+    await HeaderService.deleteHeader(req.params.id);
+    return res.status(200).json({ message: "Successfully deleted header" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
@@ -60,22 +50,16 @@ exports.updateHeader = async function(req, res, next) {
     return res.status(400).json({ message: "Id must be present" });
   }
 
-  const id = req.body._id;
-
-  console.log(req.body);
-
-  const Header = {
-    id,
-    title: req.body.title ? req.body.title : null,
-    content: req.body.content ? req.body.content : null
-  };
-
   try {
-    const updatedHeader = await HeaderService.updateHeader(Header);
+    const updatedHeader = await HeaderService.updateHeader({
+      id: req.body._id,
+      title: req.body.title,
+      content: req.body.content
+    });
     return res
       .status(200)
-      .json({ data: updatedHeader, message: "Successfully Updated Header" });
+      .json({ data: updatedHeader, message: "Successfully updated header" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };

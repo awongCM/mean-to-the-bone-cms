@@ -12,19 +12,15 @@ const pageSchema = new Schema({
   updated_at: Date
 });
 
-const Page = mongoose.model('page', pageSchema);  
-
-//Mongodb hooks
-pageSchema.pre('save', (next) => {
-  
+pageSchema.pre("save", function(next) {
   const currentDate = new Date();
-
   this.updated_at = currentDate;
-
   if (!this.created_at) {
     this.created_at = currentDate;
   }
   next();
 });
+
+const Page = mongoose.model("page", pageSchema);
 
 module.exports = Page;
