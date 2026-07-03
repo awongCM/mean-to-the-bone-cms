@@ -18,7 +18,7 @@ ul li {
   flex-wrap: wrap;
 }
 
-.pepper-panel {
+.sms-panel {
   max-width: 720px;
   margin: 2rem auto;
   padding: 1.5rem;
@@ -27,17 +27,17 @@ ul li {
   background: #fafafa;
 }
 
-.pepper-tagline {
+.sms-tagline {
   color: #666;
   margin-top: 0;
 }
 
-.pepper-form {
+.sms-form {
   margin-bottom: 1.5rem;
 }
 
-.pepper-form input,
-.pepper-form textarea {
+.sms-form input,
+.sms-form textarea {
   display: block;
   width: 100%;
   margin-bottom: 0.5rem;
@@ -45,27 +45,27 @@ ul li {
   box-sizing: border-box;
 }
 
-.pepper-form textarea {
+.sms-form textarea {
   min-height: 80px;
 }
 
-.pepper-form button {
+.sms-form button {
   padding: 0.5rem 1rem;
   cursor: pointer;
 }
 
-.pepper-message {
+.sms-message {
   color: #2c6e2f;
   font-weight: bold;
 }
 
-.pepper-lists {
+.sms-lists {
   display: flex;
   gap: 2rem;
   flex-wrap: wrap;
 }
 
-.pepper-lists > div {
+.sms-lists > div {
   flex: 1;
   min-width: 240px;
 }

@@ -28,42 +28,42 @@
   </ul>
 </div>
 
-<section class="pepper-panel" *ngIf="pepperStatus">
-  <h2>Pepper SMS Alerts</h2>
-  <p class="pepper-tagline">The notification layer for this bare-bones CMS.</p>
+<section class="sms-panel" *ngIf="smsStatus">
+  <h2>CMS SMS Notifications</h2>
+  <p class="sms-tagline">Notify subscribers when CMS content is published or updated.</p>
   <p>
     Mode:
-    <strong>{{ pepperStatus.mode }}</strong>
-    <span *ngIf="pepperStatus.mode === 'mock'"> (messages log to the server console)</span>
+    <strong>{{ smsStatus.mode }}</strong>
+    <span *ngIf="smsStatus.mode === 'mock'"> (messages log to the server console)</span>
   </p>
 
-  <div class="pepper-form">
+  <div class="sms-form">
     <h3>Subscribe</h3>
     <input type="text" placeholder="Name (optional)" [(ngModel)]="subscriberName">
     <input type="tel" placeholder="+15551234567" [(ngModel)]="subscriberPhone">
-    <button type="button" (click)="subscribeToPepper()">Subscribe</button>
+    <button type="button" (click)="subscribeToSms()">Subscribe</button>
   </div>
 
-  <div class="pepper-form">
+  <div class="sms-form">
     <h3>Send test SMS</h3>
     <input type="tel" placeholder="+15551234567" [(ngModel)]="testPhone">
-    <button type="button" (click)="sendPepperTest()">Send test</button>
+    <button type="button" (click)="sendSmsTest()">Send test</button>
   </div>
 
-  <div class="pepper-form">
+  <div class="sms-form">
     <h3>Publish page (triggers SMS)</h3>
     <input type="text" placeholder="Page title" [(ngModel)]="newPageTitle">
     <textarea placeholder="Page content" [(ngModel)]="newPageContent"></textarea>
     <button type="button" (click)="publishPage()">Publish page</button>
   </div>
 
-  <p class="pepper-message" *ngIf="pepperMessage">{{ pepperMessage }}</p>
+  <p class="sms-message" *ngIf="smsMessage">{{ smsMessage }}</p>
 
-  <div class="pepper-lists">
+  <div class="sms-lists">
     <div>
       <h3>Subscribers</h3>
       <ul>
-        <li *ngFor="let subscriber of pepperSubscribers">
+        <li *ngFor="let subscriber of smsSubscribers">
           {{ subscriber.name || 'Subscriber' }} — {{ subscriber.phone }}
         </li>
       </ul>
@@ -71,7 +71,7 @@
     <div>
       <h3>Recent notifications</h3>
       <ul>
-        <li *ngFor="let item of pepperHistory">
+        <li *ngFor="let item of smsHistory">
           {{ item.status }} to {{ item.phone }}: {{ item.message }}
         </li>
       </ul>

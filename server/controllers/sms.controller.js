@@ -1,15 +1,15 @@
-const PepperService = require("../services/pepper.service");
+const SmsService = require("../services/sms.service");
 
 exports.getStatus = function(req, res) {
   return res.status(200).json({
-    data: PepperService.getStatus(),
-    message: "Pepper status fetched"
+    data: SmsService.getStatus(),
+    message: "SMS status fetched"
   });
 };
 
 exports.getSubscribers = async function(req, res) {
   try {
-    const subscribers = await PepperService.getSubscribers();
+    const subscribers = await SmsService.getSubscribers();
     return res.status(200).json({
       data: subscribers,
       message: "Successfully fetched subscribers"
@@ -25,13 +25,13 @@ exports.subscribe = async function(req, res) {
   }
 
   try {
-    const subscriber = await PepperService.subscribe({
+    const subscriber = await SmsService.subscribe({
       name: req.body.name,
       phone: req.body.phone
     });
     return res.status(200).json({
       data: subscriber,
-      message: "Successfully subscribed to Pepper SMS alerts"
+      message: "Successfully subscribed to CMS SMS alerts"
     });
   } catch (error) {
     return res.status(400).json({ message: error.message });
@@ -44,10 +44,10 @@ exports.unsubscribe = async function(req, res) {
   }
 
   try {
-    const subscriber = await PepperService.unsubscribe(req.body.phone);
+    const subscriber = await SmsService.unsubscribe(req.body.phone);
     return res.status(200).json({
       data: subscriber,
-      message: "Successfully unsubscribed from Pepper SMS alerts"
+      message: "Successfully unsubscribed from CMS SMS alerts"
     });
   } catch (error) {
     return res.status(400).json({ message: error.message });
@@ -56,7 +56,7 @@ exports.unsubscribe = async function(req, res) {
 
 exports.getHistory = async function(req, res) {
   try {
-    const history = await PepperService.getHistory();
+    const history = await SmsService.getHistory();
     return res.status(200).json({
       data: history,
       message: "Successfully fetched notification history"
@@ -72,7 +72,7 @@ exports.sendTest = async function(req, res) {
   }
 
   try {
-    const notification = await PepperService.sendTest({
+    const notification = await SmsService.sendTest({
       phone: req.body.phone,
       message: req.body.message
     });

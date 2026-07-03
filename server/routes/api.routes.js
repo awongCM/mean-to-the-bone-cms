@@ -6,13 +6,13 @@ const users = require("./api/user.routes");
 const pages = require("./api/page.routes");
 const headers = require("./api/header.routes");
 const footers = require("./api/footer.routes");
-const pepper = require("./api/pepper.routes");
+const sms = require("./api/sms.routes");
 
 router.use("/users", users);
 router.use("/pages", pages);
 router.use("/headers", headers);
 router.use("/footers", footers);
-router.use("/pepper", pepper);
+router.use("/sms", sms);
 
 router.get("/", (req, res) => {
   res

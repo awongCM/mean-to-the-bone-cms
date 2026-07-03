@@ -11,20 +11,20 @@ export class AppComponent {
   pages: Array<any>;
   headers: Array<any>;
   footers: Array<any>;
-  pepperStatus: any;
-  pepperSubscribers: Array<any>;
-  pepperHistory: Array<any>;
+  smsStatus: any;
+  smsSubscribers: Array<any>;
+  smsHistory: Array<any>;
 
   subscriberName = '';
   subscriberPhone = '';
   testPhone = '';
   newPageTitle = '';
   newPageContent = '';
-  pepperMessage = '';
+  smsMessage = '';
 
   constructor(private _cmsService: CmsService) {
     this.loadCmsData();
-    this.loadPepperData();
+    this.loadSmsData();
   }
 
   loadCmsData() {
@@ -41,68 +41,68 @@ export class AppComponent {
       .subscribe(res => this.footers = res);
   }
 
-  loadPepperData() {
-    this._cmsService.getPepperStatus()
-      .subscribe(res => this.pepperStatus = res);
+  loadSmsData() {
+    this._cmsService.getSmsStatus()
+      .subscribe(res => this.smsStatus = res);
 
-    this._cmsService.getPepperSubscribers()
-      .subscribe(res => this.pepperSubscribers = res);
+    this._cmsService.getSmsSubscribers()
+      .subscribe(res => this.smsSubscribers = res);
 
-    this._cmsService.getPepperHistory()
-      .subscribe(res => this.pepperHistory = res);
+    this._cmsService.getSmsHistory()
+      .subscribe(res => this.smsHistory = res);
   }
 
-  subscribeToPepper() {
+  subscribeToSms() {
     if (!this.subscriberPhone) {
-      this.pepperMessage = 'Enter a phone number to subscribe.';
+      this.smsMessage = 'Enter a phone number to subscribe.';
       return;
     }
 
-    this._cmsService.subscribeToPepper(this.subscriberName, this.subscriberPhone)
+    this._cmsService.subscribeToSms(this.subscriberName, this.subscriberPhone)
       .subscribe(
         () => {
-          this.pepperMessage = 'Subscribed to Pepper SMS alerts.';
+          this.smsMessage = 'Subscribed to CMS SMS alerts.';
           this.subscriberName = '';
           this.subscriberPhone = '';
-          this.loadPepperData();
+          this.loadSmsData();
         },
-        () => this.pepperMessage = 'Subscription failed.'
+        () => this.smsMessage = 'Subscription failed.'
       );
   }
 
-  sendPepperTest() {
+  sendSmsTest() {
     if (!this.testPhone) {
-      this.pepperMessage = 'Enter a phone number for the test SMS.';
+      this.smsMessage = 'Enter a phone number for the test SMS.';
       return;
     }
 
-    this._cmsService.sendPepperTest(this.testPhone)
+    this._cmsService.sendSmsTest(this.testPhone)
       .subscribe(
         () => {
-          this.pepperMessage = 'Test SMS queued.';
+          this.smsMessage = 'Test SMS queued.';
           this.testPhone = '';
-          this.loadPepperData();
+          this.loadSmsData();
         },
-        () => this.pepperMessage = 'Test SMS failed.'
+        () => this.smsMessage = 'Test SMS failed.'
       );
   }
 
   publishPage() {
     if (!this.newPageTitle) {
-      this.pepperMessage = 'Enter a page title to publish.';
+      this.smsMessage = 'Enter a page title to publish.';
       return;
     }
 
     this._cmsService.createPage(this.newPageTitle, this.newPageContent)
       .subscribe(
         () => {
-          this.pepperMessage = 'Page published. Pepper will notify subscribers.';
+          this.smsMessage = 'Page published. Subscribers will be notified by SMS.';
           this.newPageTitle = '';
           this.newPageContent = '';
           this.loadCmsData();
-          this.loadPepperData();
+          this.loadSmsData();
         },
-        () => this.pepperMessage = 'Page publish failed.'
+        () => this.smsMessage = 'Page publish failed.'
       );
   }
 }

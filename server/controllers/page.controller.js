@@ -1,5 +1,5 @@
 const PageService = require("../services/page.service");
-const PepperService = require("../services/pepper.service");
+const SmsService = require("../services/sms.service");
 
 const _this = this;
 
@@ -37,8 +37,8 @@ exports.createPage = async function(req, res, next) {
 
   try {
     const createdPage = await PageService.createPage(newPage);
-    PepperService.notifyPagePublished(createdPage, "published").catch((err) => {
-      console.error("[Pepper] publish notification failed:", err.message);
+    SmsService.notifyPagePublished(createdPage, "published").catch((err) => {
+      console.error("[CMS SMS] publish notification failed:", err.message);
     });
     return res
       .status(200)
@@ -77,8 +77,8 @@ exports.updatePage = async function(req, res, next) {
   try {
     const updatedPage = await PageService.updatePage(page);
     if (updatedPage) {
-      PepperService.notifyPagePublished(updatedPage, "updated").catch((err) => {
-        console.error("[Pepper] update notification failed:", err.message);
+      SmsService.notifyPagePublished(updatedPage, "updated").catch((err) => {
+        console.error("[CMS SMS] update notification failed:", err.message);
       });
     }
     return res

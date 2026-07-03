@@ -32,28 +32,28 @@ export class CmsService {
       .map(result => this.result = result.json().data);
   }
 
-  getPepperStatus() {
-    return this._http.get("/api/pepper/status")
+  getSmsStatus() {
+    return this._http.get("/api/sms/status")
       .map(result => result.json().data);
   }
 
-  getPepperSubscribers() {
-    return this._http.get("/api/pepper/subscribers")
+  getSmsSubscribers() {
+    return this._http.get("/api/sms/subscribers")
       .map(result => result.json().data);
   }
 
-  getPepperHistory() {
-    return this._http.get("/api/pepper/history")
+  getSmsHistory() {
+    return this._http.get("/api/sms/history")
       .map(result => result.json().data);
   }
 
-  subscribeToPepper(name: string, phone: string) {
-    return this._http.post("/api/pepper/subscribe", { name, phone }, this.options)
+  subscribeToSms(name: string, phone: string) {
+    return this._http.post("/api/sms/subscribe", { name, phone }, this.options)
       .map(result => result.json());
   }
 
-  sendPepperTest(phone: string) {
-    return this._http.post("/api/pepper/test", { phone }, this.options)
+  sendSmsTest(phone: string) {
+    return this._http.post("/api/sms/test", { phone }, this.options)
       .map(result => result.json());
   }
 

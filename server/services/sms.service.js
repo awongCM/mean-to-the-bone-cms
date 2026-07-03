@@ -60,8 +60,8 @@ async function deliverSms(to, body) {
     return sendViaTwilio(to, body);
   }
 
-  console.log(`[PEPPER mock SMS] To: ${to}`);
-  console.log(`[PEPPER mock SMS] Body: ${body}`);
+  console.log(`[CMS SMS mock] To: ${to}`);
+  console.log(`[CMS SMS mock] Body: ${body}`);
   return { sid: `mock-${Date.now()}`, status: "mock" };
 }
 
@@ -79,8 +79,8 @@ async function logNotification({ phone, message, status, providerId, pageId, err
 
 exports.getStatus = function() {
   return {
-    name: "Pepper",
-    description: "SMS notification layer for Mean-To-The-Bone CMS",
+    name: "SMS Notifications",
+    description: "SMS alerts for Mean-To-The-Bone CMS content updates",
     mode: isTwilioConfigured() ? "twilio" : "mock",
     twilioConfigured: isTwilioConfigured()
   };
@@ -125,7 +125,7 @@ exports.getHistory = async function(limit) {
 };
 
 exports.sendTest = async function({ phone, message }) {
-  const body = message || "Pepper test: your CMS SMS notifications are working.";
+  const body = message || "CMS test: your SMS notifications are working.";
   const normalizedPhone = phone.replace(/\s+/g, "");
 
   try {
@@ -154,7 +154,7 @@ exports.notifyPagePublished = async function(page, event) {
   }
 
   const action = event === "updated" ? "updated" : "published";
-  const body = `Pepper alert: Page "${page.title}" was ${action} on Mean-To-The-Bone CMS.`;
+  const body = `CMS alert: Page "${page.title}" was ${action} on Mean-To-The-Bone CMS.`;
   const results = [];
 
   for (const subscriber of subscribers) {
