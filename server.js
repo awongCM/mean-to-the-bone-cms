@@ -41,8 +41,8 @@ app.set("port", port);
 
 const server = http.createServer(app);
 
-server.listen(port, async () => {
+server.listen(port, "0.0.0.0", async () => {
   const isConnected = await mongo_server.openDB();
   const message = isConnected ? "connected" : "not connected";
-  console.log(`Running on localhost:${port} and with DB is ${message}`);
+  console.log(`Running on 0.0.0.0:${port} and DB is ${message}`);
 });
