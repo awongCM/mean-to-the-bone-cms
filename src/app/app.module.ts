@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 
 // HTTP modules resolved based on these release logs
@@ -15,6 +16,7 @@ import { CmsService } from './cms.service';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     HttpModule,
     HttpClientModule
   ],

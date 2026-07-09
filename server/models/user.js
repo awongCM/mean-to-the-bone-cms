@@ -15,18 +15,15 @@ const userSchema = new Schema({
 });
   
 //Mongodb Callbacks Hooks
-userSchema.pre('save', (next) => {
-  
+userSchema.pre("save", function(next) {
   const currentDate = new Date();
-
   this.updated_at = currentDate;
-
   if (!this.created_at) {
     this.created_at = currentDate;
   }
   next();
 });
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model("user", userSchema);
 
 module.exports = User;

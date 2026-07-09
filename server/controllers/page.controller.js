@@ -1,57 +1,47 @@
 const PageService = require("../services/page.service");
 
-const _this = this;
-
 exports.getPages = async function(req, res, next) {
   try {
     const pages = await PageService.getPages();
-
     return res
       .status(200)
-      .json({ data: pages, message: "Successfully fetched Page" });
+      .json({ data: pages, message: "Successfully fetched pages" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
 exports.getPage = async function(req, res, next) {
   try {
-    const page_id = req.query.id;
-
-    const page = await PageService.getPage(page_id);
-
+    const page = await PageService.getPage(req.params.id);
     return res
       .status(200)
-      .json({ data: page, message: "Successfully fetched Page" });
+      .json({ data: page, message: "Successfully fetched page" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
 exports.createPage = async function(req, res, next) {
-  const newPage = {
-    title: req.body.title,
-    content: req.body.content
-  };
-
   try {
-    const createdPage = await PageService.createPage(newPage);
+    const createdPage = await PageService.createPage({
+      title: req.body.title,
+      content: req.body.content
+    });
     return res
       .status(200)
-      .json({ data: createdPage, message: "Successfully fetched Page" });
+      .json({ data: createdPage, message: "Successfully created page" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
 exports.removePage = async function(req, res, next) {
-  const id = req.params.id;
-
   try {
-    const deletedPage = await PageService.deletePage(id);
-    return res.status(200).json({ message: "Successfully deleted Page" });
+    await PageService.deletePage(req.params.id);
+    return res.status(200).json({ message: "Successfully deleted page" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
@@ -60,23 +50,16 @@ exports.updatePage = async function(req, res, next) {
     return res.status(400).json({ message: "Id must be present" });
   }
 
-  const id = req.body._id;
-
-  console.log(req.body);
-
-  const page = {
-    id,
-    title: req.body.title ? req.body.title : null,
-    description: req.body.description ? req.body.description : null,
-    status: req.body.status ? req.body.status : null
-  };
-
   try {
-    const updatedPage = await PageService.updatePage(page);
+    const updatedPage = await PageService.updatePage({
+      id: req.body._id,
+      title: req.body.title,
+      content: req.body.content
+    });
     return res
       .status(200)
-      .json({ data: updatedPage, message: "Successfully Updated Page" });
+      .json({ data: updatedPage, message: "Successfully updated page" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };

@@ -12,19 +12,15 @@ const footerSchema = new Schema({
   updated_at: Date
 });
 
-const Footer = mongoose.model('footer', footerSchema);  
-
-//Mongodb hooks
-footerSchema.pre('save', (next) => {
-  
+footerSchema.pre("save", function(next) {
   const currentDate = new Date();
-
   this.updated_at = currentDate;
-
   if (!this.created_at) {
     this.created_at = currentDate;
   }
   next();
 });
+
+const Footer = mongoose.model("footer", footerSchema);
 
 module.exports = Footer;

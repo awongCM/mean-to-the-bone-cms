@@ -1,29 +1,66 @@
-<h1>Welcome to our Mean-to-the-bone CMS Page</h1>
+<h1>Mean-To-The-Bone CMS</h1>
+<p class="subtitle">Manage pages, headers, footers, and users.</p>
 
-<div class="cms-container">
-    <div class="header">
-      <h2>Headers</h2>
-      <ul>
-        <li *ngFor="let header of headers">{{ header.title }}</li>
-      </ul>
-    </div>
-    <div class="page">
-      <h2>Pages</h2>
-      <ul>
-        <li *ngFor="let page of pages">{{ page.title }}</li>
-      </ul>
-    </div>
-    <div class="footer">
-      <h2>Footers</h2>
-      <ul>
-        <li *ngFor="let footer of footers">{{ footer.title }}</li>
-      </ul>
-    </div>
-</div>
+<nav class="tabs">
+  <button type="button" [class.active]="activeTab === 'pages'" (click)="setTab('pages')">Pages</button>
+  <button type="button" [class.active]="activeTab === 'headers'" (click)="setTab('headers')">Headers</button>
+  <button type="button" [class.active]="activeTab === 'footers'" (click)="setTab('footers')">Footers</button>
+  <button type="button" [class.active]="activeTab === 'users'" (click)="setTab('users')">Users</button>
+</nav>
 
-<div class="users">
-  <ul>
-    <li *ngFor="let user of users">{{ user.name }}</li>
-  </ul>  
-</div>
+<section class="admin-panel">
+  <div class="editor" *ngIf="activeTab !== 'users'">
+    <h2>{{ editingId ? 'Edit' : 'Create' }} {{ activeTab | titlecase }}</h2>
+    <input type="text" placeholder="Title" [(ngModel)]="draft.title">
+    <textarea placeholder="Content" [(ngModel)]="draft.content"></textarea>
+    <div class="actions">
+      <button type="button" (click)="saveContent()">{{ editingId ? 'Update' : 'Create' }}</button>
+      <button type="button" class="secondary" *ngIf="editingId" (click)="cancelEdit()">Cancel</button>
+    </div>
+  </div>
 
+  <div class="editor" *ngIf="activeTab === 'users'">
+    <h2>{{ editingId ? 'Edit' : 'Create' }} User</h2>
+    <input type="text" placeholder="Name" [(ngModel)]="userDraft.name">
+    <input type="text" placeholder="Username" [(ngModel)]="userDraft.username">
+    <input type="password" placeholder="{{ editingId ? 'New password (optional)' : 'Password' }}" [(ngModel)]="userDraft.password">
+    <label class="checkbox">
+      <input type="checkbox" [(ngModel)]="userDraft.admin"> Admin user
+    </label>
+    <div class="actions">
+      <button type="button" (click)="saveUser()">{{ editingId ? 'Update' : 'Create' }}</button>
+      <button type="button" class="secondary" *ngIf="editingId" (click)="cancelEdit()">Cancel</button>
+    </div>
+  </div>
+
+  <p class="status-message" *ngIf="statusMessage">{{ statusMessage }}</p>
+
+  <div class="content-list">
+    <h2>Existing {{ activeTab | titlecase }}</h2>
+    <ul *ngIf="activeTab !== 'users'">
+      <li *ngFor="let item of currentItems()">
+        <div class="item-body">
+          <strong>{{ item.title }}</strong>
+          <p>{{ item.content }}</p>
+        </div>
+        <div class="item-actions">
+          <button type="button" (click)="startEdit(item)">Edit</button>
+          <button type="button" class="danger" (click)="deleteItem(item)">Delete</button>
+        </div>
+      </li>
+    </ul>
+
+    <ul *ngIf="activeTab === 'users'">
+      <li *ngFor="let user of users">
+        <div class="item-body">
+          <strong>{{ user.name || user.username }}</strong>
+          <p>@{{ user.username }} <span *ngIf="user.admin">(admin)</span></p>
+        </div>
+        <div class="item-actions">
+          <button type="button" (click)="startEdit(user)">Edit</button>
+          <button type="button" class="danger" (click)="deleteItem(user)">Delete</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>

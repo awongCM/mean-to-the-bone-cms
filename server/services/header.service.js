@@ -1,23 +1,11 @@
 const Header = require("../models/header");
 
-const _this = this;
-
 exports.getHeaders = async function() {
-  try {
-    const header = await Header.find();
-    return header;
-  } catch (error) {
-    throw Error("Error when fetcing Headers ");
-  }
+  return Header.find().sort({ created_at: -1 });
 };
 
 exports.getHeader = async function(id) {
-  try {
-    const header = await Header.findById(id);
-    return header;
-  } catch (error) {
-    throw Error("Error when fetcing Header by id: ");
-  }
+  return Header.findById(id);
 };
 
 exports.createHeader = async function(header) {
@@ -25,51 +13,29 @@ exports.createHeader = async function(header) {
     title: header.title,
     content: header.content
   });
-
-  try {
-    const savedHeader = await newHeader.save();
-    return savedHeader;
-  } catch (error) {
-    throw Error("Error when saving Header");
-  }
+  return newHeader.save();
 };
 
 exports.deleteHeader = async function(id) {
-  try {
-    const deletedHeader = await Header.remove({ _id: id });
-    if (deletedHeader.result.n === 0) {
-      throw Error("Header could not be deleted");
-    }
-    return deletedHeader;
-  } catch (error) {
-    throw Error("Error when deleting Header");
+  const deletedHeader = await Header.remove({ _id: id });
+  if (deletedHeader.result.n === 0) {
+    throw new Error("Header could not be deleted");
   }
+  return deletedHeader;
 };
 
 exports.updateHeader = async function(header) {
-  const current_id = header.id;
-
-  try {
-    const currentHeader = await newHeader.findById(current_id);
-  } catch (error) {
-    throw Error("Error when finding Header");
-  }
-
+  const currentHeader = await Header.findById(header.id);
   if (!currentHeader) {
     return false;
   }
 
-  console.log(currentHeader);
-
-  currentHeader.title = header.title;
-  currentHeader.content = header.content;
-
-  console.log(currentHeader);
-
-  try {
-    const savedHeader = await currentHeader.save();
-    return savedHeader;
-  } catch (error) {
-    throw Error("Error when updating Header");
+  if (header.title !== undefined) {
+    currentHeader.title = header.title;
   }
+  if (header.content !== undefined) {
+    currentHeader.content = header.content;
+  }
+
+  return currentHeader.save();
 };

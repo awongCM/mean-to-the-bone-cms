@@ -1,75 +1,49 @@
 const User = require("../models/user");
 
-const _this = this;
-
 exports.getUsers = async function() {
-  try {
-    const users = await User.find({});
-    return users;
-  } catch (error) {
-    throw Error("Error when fetching Users ");
-  }
+  return User.find({}).sort({ created_at: -1 });
 };
 
 exports.getUser = async function(id) {
-  try {
-    const user = await User.findById(id);
-    return user;
-  } catch (error) {
-    throw Error("Error when fetcing User by id: ");
-  }
+  return User.findById(id);
 };
 
 exports.createUser = async function(user) {
   const newUser = new User({
-    title: user.title,
-    content: user.content
+    name: user.name,
+    username: user.username,
+    password: user.password,
+    admin: user.admin || false
   });
-
-  try {
-    const savedUser = await newUser.save();
-    return savedUser;
-  } catch (error) {
-    throw Error("Error when saving User");
-  }
+  return newUser.save();
 };
 
 exports.deleteUser = async function(id) {
-  try {
-    const deletedUser = await User.remove({ _id: id });
-    if (deletedUser.result.n === 0) {
-      throw Error("User could not be deleted");
-    }
-    return deletedUser;
-  } catch (error) {
-    throw Error("Error when deleting User");
+  const deletedUser = await User.remove({ _id: id });
+  if (deletedUser.result.n === 0) {
+    throw new Error("User could not be deleted");
   }
+  return deletedUser;
 };
 
 exports.updateUser = async function(user) {
-  const current_id = user.id;
-
-  try {
-    const currentUser = await newUser.findById(current_id);
-  } catch (error) {
-    throw Error("Error when finding User");
-  }
-
+  const currentUser = await User.findById(user.id);
   if (!currentUser) {
     return false;
   }
 
-  console.log(currentUser);
-
-  currentUser.title = user.title;
-  currentUser.content = user.content;
-
-  console.log(currentUser);
-
-  try {
-    const savedUser = await currentUser.save();
-    return savedUser;
-  } catch (error) {
-    throw Error("Error when updating user");
+  if (user.name !== undefined) {
+    currentUser.name = user.name;
   }
+  if (user.username !== undefined) {
+    currentUser.username = user.username;
+  }
+  if (user.password !== undefined) {
+    currentUser.password = user.password;
+  }
+  if (user.admin !== undefined) {
+    currentUser.admin = user.admin;
+  }
+
+  return currentUser.save();
 };

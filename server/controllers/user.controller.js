@@ -1,14 +1,11 @@
 const UserService = require("../services/user.service");
 
-const _this = this;
-
 exports.getUsers = async function(req, res, next) {
   try {
     const users = await UserService.getUsers();
-
     return res
       .status(200)
-      .json({ data: users, message: "Successfully fetched User" });
+      .json({ data: users, message: "Successfully fetched users" });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
@@ -16,42 +13,37 @@ exports.getUsers = async function(req, res, next) {
 
 exports.getUser = async function(req, res, next) {
   try {
-    const user_id = req.query.id;
-
-    const user = await UserService.getUser(user_id);
-
+    const user = await UserService.getUser(req.params.id);
     return res
       .status(200)
-      .json({ data: user, message: "Successfully fetched User" });
+      .json({ data: user, message: "Successfully fetched user" });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
 };
 
 exports.insertUser = async function(req, res, next) {
-  const newUser = {
-    title: req.body.title,
-    content: req.body.content
-  };
-
   try {
-    const insertedUser = await UserService.insertUser(newUser);
+    const insertedUser = await UserService.createUser({
+      name: req.body.name,
+      username: req.body.username,
+      password: req.body.password,
+      admin: req.body.admin
+    });
     return res
       .status(200)
-      .json({ data: insertedUser, message: "Successfully inserted User" });
+      .json({ data: insertedUser, message: "Successfully created user" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
 exports.removeUser = async function(req, res, next) {
-  const id = req.params.id;
-
   try {
-    const deletedPage = await UserService.deleteUser(id);
-    return res.status(200).json({ message: "Successfully deleted User" });
+    await UserService.deleteUser(req.params.id);
+    return res.status(200).json({ message: "Successfully deleted user" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
@@ -60,23 +52,18 @@ exports.updateUser = async function(req, res, next) {
     return res.status(400).json({ message: "Id must be present" });
   }
 
-  const id = req.body._id;
-
-  console.log(req.body);
-
-  const user = {
-    id,
-    title: req.body.title ? req.body.title : null,
-    description: req.body.description ? req.body.description : null,
-    status: req.body.status ? req.body.status : null
-  };
-
   try {
-    const updatedPage = await UserService.updateUser(user);
+    const updatedUser = await UserService.updateUser({
+      id: req.body._id,
+      name: req.body.name,
+      username: req.body.username,
+      password: req.body.password,
+      admin: req.body.admin
+    });
     return res
       .status(200)
-      .json({ data: updatedPage, message: "Successfully Updated User" });
+      .json({ data: updatedUser, message: "Successfully updated user" });
   } catch (error) {
-    return res.status(400).json({ message: e.message });
+    return res.status(400).json({ message: error.message });
   }
 };
